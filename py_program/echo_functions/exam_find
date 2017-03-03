@@ -1,0 +1,20 @@
+#!/usr/bin/env  python
+#-*- coding: utf-8 -*-
+from bs4 import BeautifulSoup
+import urllib.request
+exam_pre='wl16'
+exam_url='http://acm.sdibt.edu.cn/JudgeOnline/contest.php?search='
+if __name__ == "__main__":
+    exam_url += exam_pre
+    response = urllib.request.urlopen(exam_url)
+    soup = BeautifulSoup(response, "lxml", from_encoding="utf-8")
+    print("网页标题:"+soup.title.string)#获取标题
+    '''获取各种量'''
+    for exam_tem in soup.findAll(align='center'):
+        if 'evenrow' in str(exam_tem) or 'oddrow' in str(exam_tem):
+            print("id:"+exam_tem.td.string)
+            print("title:"+exam_tem.a.string)
+            exam_status=exam_tem.find_next('font').string
+            if exam_status== ' Running ':
+                exam_status='Running'
+            print('status:'+exam_status)
